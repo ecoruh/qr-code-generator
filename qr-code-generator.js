@@ -2,16 +2,19 @@
 const speakeasy = require('speakeasy');
 const qrcode = require('qrcode-terminal');
 
-// Generate a new TOTP secret; adjust options as needed (e.g., name for display)
+// Get the optional 'name' argument from the command line
+const name = process.argv[2] || 'MyWebApp';
+
+// Generate a new TOTP secret
 const secret = speakeasy.generateSecret({
   length: 20,
-  name: 'MyWebApp'
+  name: name
 });
 
-// Display the Base32 secret (to be used later for TOTP verification)
+// Display the Base32 secret
 console.log('Your new TOTP secret (Base32 encoded):');
 console.log(secret.base32);
 
-// Print the QR code (using the otpauth URL) in the terminal as ASCII blocks
-console.log('\nScan the following QR Code with your Authenticator app:');
+// Print the QR code in the terminal
+console.log(`\nScan the following QR Code with your Authenticator app (Account Name: ${name}):`);
 qrcode.generate(secret.otpauth_url, { small: true });
